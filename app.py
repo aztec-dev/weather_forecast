@@ -5,14 +5,15 @@ Author: Azariah Pundari
 """
 
 from flask import Flask
-from markupsafe import escape
+from flask import render_template
+# from markupsafe import escape
 
 app = Flask(__name__)  # Creates an instance of flask
 
-@app.route("/")
-def weather_forecast():
-    return "<h1>Weather Forecast</h1>"
+@app.route("/weather_forecast")
+def weather_forecast(city=None):
+    return render_template('weather_forecast.html')
 
-@app.route("/<name>")
-def hello(name):
-    return f"<h1>Hello {escape(name)}"
+# @app.route("/<name>")
+# def hello(name):
+#     return f"<h1>Hello {escape(name)}"
