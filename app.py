@@ -15,17 +15,27 @@ load_dotenv()
 
 app = Flask(__name__)  # Creates an instance of flask
 
-@app.route("/weather_forecast", methods=['GET'])
+@app.get("/weather_forecast")
 def get_forecast():
     # Testing API get
-    api_key = os.getenv("API_KEY")
-    params = ["-11.8092", "51.509865"]
-    api_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={params[0]}&lon={params[1]}&appid={api_key}"
+    api_key = os.getenv("OPEN_WEATHER_MAP_API_KEY")
+    cities = ["Brisbane", "Townsville", "Cairns", "Port Moresby"]
+    data = []
+    for city in cities:
+        api_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={api_key}"
+        response = requests.get(api_url)
+        geo_location = response.json()
+        for i in range(len(geo_location)):
+            required_data = {
+                "name": {geo_location[i]['name']},
+                "lon": {geo_location[i]['lon']},
+                "lat": {geo_location[i]['lat']}
+            }
+            data.append(required_data)
 
     # Make a request
-    response = requests.get(api_url)
     if response.status_code == 200:
-        weather_data = response.json()
-        return jsonify(weather_data)  # Return JSON to the user
+        # weather_data = data.json()
+        return render_template("weather_forecast.html", weather=data)  # Return JSON to the user
     else:
-        return jsonify({"error": "Failed to fetch data"}), response.status_code
+        return jsonify({"error": "Failed to fetch data"}), geo_location.status_code
