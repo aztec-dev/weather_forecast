@@ -25,11 +25,11 @@ def get_forecast():
         api_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={api_key}"
         response = requests.get(api_url)
         geo_location = response.json()
-        for i in range(len(geo_location)):
+        for city_data in geo_location:
             required_data = {
-                "name": {geo_location[i]['name']},
-                "lon": {geo_location[i]['lon']},
-                "lat": {geo_location[i]['lat']}
+                "name": city_data['name'],
+                "lon": city_data['lon'],
+                "lat": city_data['lat']
             }
             data.append(required_data)
 
