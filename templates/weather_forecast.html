@@ -9,8 +9,19 @@
     <h1>
         Weather Forecast
     </h1>
+    <!-- Drop down menu -->
+     <select name="cities">
+        {% for city in weather %}
+        <option value="{city['name']}" SELECTED>{{city['name']}}</option>
+        {% endfor %}
+     </select>
     {% if weather %}
         <p> Location: {{ weather }}</p>
+            <ul>
+        {% for city in weather %}
+            <li>{{ city['name'] }}</li>
+        {% endfor %}
+    </ul>    
     {% else %}
         <p>No weather data available</p>
     {% endif %}
