@@ -4,23 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast</title>
+    <script>
+        function navigateToCity() {
+            const selectedCity = document.getElementById("city-select").value;
+            if (selectedCity) {
+                window.location.href = `/weather_forecast/${selectedCity}`;
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>
-        Weather Forecast
-    </h1>
+    <h1>Weather Forecast</h1>
 
+    <!-- Dropdown to select city -->
+    <form>
+        <label for="city-select">Choose a city:</label>
+        <select id="city-select" onchange="navigateToCity()">
+            <option value="">--Select a City--</option>
+            {% for city in all_cities %}
+            <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <h2>Weather Details for {{ city_name }}</h2>
     {% if weather %}
-        <p> Location: {{ city_name }}</p>
-            <ul>
+        <ul>
         {% for city in weather %}
-            <li>{{ city.name }}</li>
-            <li>{{ city.lat }}</li>
-            <li>{{ city.lon }}</li>
-            <li>{{ city.temp }}&deg; Celcius</li>
+            <li>
+                <p>City: {{ city.name }}</p>
+                {% if city.temp %}
+                <p>Temperature: {{ city.temp }}&deg; Celcius</p>
+                {% endif %}
+            </li>
         {% endfor %}
+        </ul>
     {% else %}
-        <p>No weather data available for this city.</p>
+        <p>No weather data available.</p>
     {% endif %}
 </body>
 </html>

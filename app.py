@@ -56,18 +56,17 @@ def get_weather():
 @app.route("/weather_forecast")
 @app.route("/weather_forecast/<city_name>")
 def display_weather(city_name=None):
-    data = get_geographic_location()  # get the data to display city name
+    city_data = get_geographic_location()
     weather_data = get_weather()
-    for weather in weather_data:
-        for city in data:
-            if weather['lat'] == city['lat'] and weather['lon'] == city['lon']:
-                weather['name'] = city['name']  # Add name to weather data
 
-    if city_name:  # Display data based on a specific city name
+    # Link city names to weather data
+    for weather in weather_data:
+        for city in city_data:
+            if weather['lat'] == city['lat'] and weather['lon'] == city['lon']:
+                weather['name'] = city['name']
+
+    if city_name:  # Show weather for a specific city
         city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
-        if city_weather:
-            return render_template("weather_forecast.html", city_name=city_name, weather=city_weather)
-        else:
-            return render_template("weather_forecast.html", city_name="Unknown", weather=[])
-    else:  # Display all cities' weather data
-        return render_template("weather_forecast.html", city_name="All Cities", weather=weather_data)
+        return render_template("weather_forecast.html", city_name=city_name, weather=city_weather, all_cities=[city["name"] for city in city_data])
+    else:  # Show all cities
+        return render_template("weather_forecast.html", city_name="All Cities", weather=weather_data, all_cities=[city["name"] for city in city_data])
