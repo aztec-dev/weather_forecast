@@ -68,6 +68,7 @@ def get_weather():
             required_data["temp"] = int(round(weather_forecast["current"]["temp"], 2))  # Temperature
             required_data["humidity"] = weather_forecast["current"]["humidity"]  # Humidity
             required_data["visibility"] = weather_forecast["current"]["visibility"]
+            required_data["weather_description"] = weather_forecast["current"]["weather"][0]["description"]
 
         # Get timezone data
         if "timezone_offset" in weather_forecast:
@@ -93,6 +94,7 @@ def get_weather():
                     "sunrise": sunrise_local.strftime("%I:%M %p"),
                     "sunset": sunset_local.strftime("%I:%M %p"),
                     "rain": day_data.get("rain", 0),  # Rain over the day
+                    "uvi": day_data["uvi"],
                     "aqi": city_aqi
                 }
                 daily_forecast.append(day_data_processed)
@@ -124,8 +126,24 @@ def display_weather(city_name=None):
                 weather['name'] = city['name']
                 weather['aqi'] = city.get('aqi', "No AQI data")  # Add AQI, fallback to "No AQI data" if missing
 
-    if city_name:  # Show weather for a specific city
-        city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
-        return render_template("weather_forecast.html", city_name=city_name, weather=city_weather, all_cities=[city["name"] for city in city_data])
-    else:  # Show all cities
-        return render_template("weather_forecast.html", city_name="All Cities", weather=weather_data, all_cities=[city["name"] for city in city_data])
+    if city_name is None or city_name.lower() == "all cities":
+        print("Displaying all cities' data")
+        return render_template(
+            "weather_forecast.html",
+            city_name="All Cities",
+            weather=weather_data,
+            all_cities=[city["name"] for city in city_data]
+        )
+
+    # Show weather for a specific city
+    city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
+    if city_weather:
+        print(f"Displaying data for city: {city_name}")
+        return render_template(
+            "weather_forecast.html",
+            city_name=city_name,
+            weather=city_weather,
+            all_cities=[city["name"] for city in city_data]
+        )
+
+
