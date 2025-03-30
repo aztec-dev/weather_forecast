@@ -36,9 +36,15 @@
                 {% if city.temp %}
                 <p>Temperature: {{ city.temp }}&deg; Celcius</p>
                 {% endif %}
+                {% if city.summary %}
+                    <p>Summary: {{ city.summary }}</p>
+                {% else %}
+                    <p>Summary: Not available</p>
+                {% endif %}
             </li>
         {% endfor %}
         </ul>
+        <p>{{weather}}</p>
     {% else %}
         <p>No weather data available.</p>
     {% endif %}
