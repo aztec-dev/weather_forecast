@@ -15,21 +15,22 @@
     </script>
 </head>
 <body>
-    <h1>Weather Forecast</h1>
-
-    <!-- Dropdown to select city -->
-    <form>
-        <label for="city-select">Choose a city:</label>
-        <select id="city-select" onchange="navigateToCity()">
-            <option value="">--Select a City--</option>
-            {% for city in all_cities %}
-            <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
-            {% endfor %}
-        </select>
-    </form>
     <div class="container">
-        <span class="title">{{ city_name }}</span>
-        {% if weather %}
+        <span class="title"><h1 class="">Weather Forecast</h1></span>
+
+        <!-- Dropdown to select city -->
+        <form>
+            <label for="city-select">Choose a city:</label>
+            <select id="city-select" onchange="navigateToCity()">
+                <option value="">--Select a City--</option>
+                {% for city in all_cities %}
+                <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <span>{{ city_name }}</span>
+        <!-- {% if weather %}
             <ul>
             {% for city in weather %}
                 <li>
@@ -55,7 +56,28 @@
             </ul>
         {% else %}
             <p>No weather data available.</p>
-        {% endif %}
+        {% endif %} -->
+
+<!-- Display daily forecast -->
+<h3>Daily Forecast for {{ city_name }}</h3>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Min Temp</th>
+        <th>Max Temp</th>
+        <th>Weather</th>
+    </tr>
+    {% for day in weather[0].daily %}
+    <tr>
+        <td>{{ day.date }}</td>
+        <td>{{ day.temp_min }}°C</td>
+        <td>{{ day.temp_max }}°C</td>
+        <td>{{ day.weather }}</td>
+        <td>{{ day.rain }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
     </div>
 
 </body>
