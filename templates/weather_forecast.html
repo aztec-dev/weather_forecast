@@ -68,18 +68,21 @@
         <th>Weather</th>
         <th>Wind Speed</th>
         <th>Wind Degrees</th>
+        <th>Visibility</th>
     </tr>
     {% for day in weather[0].daily %}
     <tr>
         <td>{{ day.date }}</td>
         <td>{{ day.temp_min }}°C</td>
         <td>{{ day.temp_max }}°C</td>
-        <td>{{ day.weather }}</td>
+        <td>{{ day.weather_description }}</td>
         <td>{{ day.rain }}</td>
         <td> {{ day.wind_speed }}</td>
         <td> {{ day.wind_deg }}</td>
-    </tr>
+        
     {% endfor %}
+        <td rowspan="7"> {{ weather[0].visibility }}</td>
+    </tr>
 </table>
 
     </div>

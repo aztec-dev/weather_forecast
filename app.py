@@ -47,6 +47,7 @@ def get_weather():
         if "current" in weather_forecast:
             required_data["temp"] = int(round(weather_forecast["current"]["temp"], 2))  # Temperature
             required_data["humidity"] = weather_forecast["current"]["humidity"]  # Humidity
+            required_data["visibility"] = weather_forecast["current"]["visibility"]
 
         # Get timezone data
         if "timezone_offset" in weather_forecast:
