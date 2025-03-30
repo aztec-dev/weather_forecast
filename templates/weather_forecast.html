@@ -71,6 +71,7 @@
         <th>Visibility</th>
         <th>Sunrise</th>
         <th>Sunset</th>
+        <th>Air Pollution Index</th>
     </tr>
     {% for day in weather[0].daily %}
     <tr>
@@ -83,6 +84,7 @@
         <td> {{ day.wind_deg }}</td>
         <td>{{ day.sunrise }}</td>
         <td> {{ day.sunset }} </td>
+        <td>{% if day.aqi %} {{ day.aqi }} {% else %} No AQI data {% endif %}</td>
     {% endfor %}
         <td rowspan="7"> {{ weather[0].visibility }}</td>
     </tr>

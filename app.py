@@ -27,8 +27,26 @@ def get_geographic_location():
 
     return data
 
+def get_air_pollution_index():
+    data = get_geographic_location()
+    required_data = []
+    for city in data:
+        air_pollution_api_url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={city['lat']}&lon={city['lon']}&appid={api_key}"
+        response = requests.get(air_pollution_api_url)
+        air_pollution = response.json()
+        air_pollution_index = {
+            "lat": city["lat"],
+            "lon": city["lon"]
+        }
+        if "list" in air_pollution and len(air_pollution["list"]) > 0:
+            air_pollution_index["aqi"] = air_pollution["list"][0]["main"]["aqi"]
+        required_data.append(air_pollution_index)
+    # print(required_data)
+    return required_data
+
 def get_weather():
     data = get_geographic_location()
+    air_pollution_index = get_air_pollution_index()
     weather_data = []
 
     for city in data:
@@ -42,6 +60,8 @@ def get_weather():
             "lon": city["lon"],
             "name": city["name"],  # Include city name from geolocation data
         }
+        pollution = next((item for item in air_pollution_index if item['lat'] == city['lat'] and item['lon'] == city['lon']), None)
+        city_aqi = pollution['aqi'] if pollution else "No AQI data"
 
         # Get current weather
         if "current" in weather_forecast:
@@ -60,6 +80,7 @@ def get_weather():
         if "daily" in weather_forecast:
             daily_forecast = []
             for day_data in weather_forecast["daily"]:
+                # Convert sunrise/sunset time to readable format
                 sunrise_local = datetime.fromtimestamp(day_data["sunrise"] + timezone_offset, timezone.utc)
                 sunset_local = datetime.fromtimestamp(day_data["sunset"] + timezone_offset, timezone.utc)
                 day_data_processed = {
@@ -72,14 +93,15 @@ def get_weather():
                     "sunrise": sunrise_local.strftime("%I:%M %p"),
                     "sunset": sunset_local.strftime("%I:%M %p"),
                     "rain": day_data.get("rain", 0),  # Rain over the day
+                    "aqi": city_aqi
                 }
                 daily_forecast.append(day_data_processed)
 
             required_data["daily"] = daily_forecast
 
         weather_data.append(required_data)
-        print(weather_data[-1])  # Print the last item added to weather_data for debugging
-
+        # print(weather_data[-1])  # Print the last item added to weather_data for debugging
+    
     return weather_data
 
 @app.route("/weather_forecast")
@@ -87,12 +109,20 @@ def get_weather():
 def display_weather(city_name=None):
     city_data = get_geographic_location()
     weather_data = get_weather()
+    air_pollution_index = get_air_pollution_index()
 
-    # Link city names to weather data
+    # map city data with air pollution index
+    for city in city_data:
+        for pollution in air_pollution_index:
+            if city['lat'] == pollution['lat'] and city['lon'] == pollution['lon']:
+                city['aqi'] = pollution['aqi']  # Add AQI to city data
+
+    # link city names and AQI to weather data
     for weather in weather_data:
         for city in city_data:
             if weather['lat'] == city['lat'] and weather['lon'] == city['lon']:
                 weather['name'] = city['name']
+                weather['aqi'] = city.get('aqi', "No AQI data")  # Add AQI, fallback to "No AQI data" if missing
 
     if city_name:  # Show weather for a specific city
         city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
