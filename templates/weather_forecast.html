@@ -27,31 +27,36 @@
             {% endfor %}
         </select>
     </form>
+    <div class="container">
+        <span class="title">{{ city_name }}</span>
+        {% if weather %}
+            <ul>
+            {% for city in weather %}
+                <li>
+                    <p>City: {{ city.name }}</p>
+                    {% if city.local_time %}
+                        <p>Local Time: {{ city.local_time }}</p>
+                    {%  endif %}
+                    {% if city.temp %}
+                    <p>Temperature: {{ city.temp }}&deg; Celcius</p>
+                    {% endif %}
+                    {% if city.summary %}
+                        <p>Summary: {{ city.summary }}</p>
+                    {% else %}
+                        <p>Summary: Not available</p>
+                    {% endif %}
+                    {% if city.weather_main %}
+                     <p>Main weather: {{ city.weather_main }}</p>
+                    {% else %}
+                        <p>Main weather: Not available</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No weather data available.</p>
+        {% endif %}
+    </div>
 
-    <h2>Weather Details for {{ city_name }}</h2>
-    {% if weather %}
-        <ul>
-        {% for city in weather %}
-            <li>
-                <p>City: {{ city.name }}</p>
-                {% if city.temp %}
-                <p>Temperature: {{ city.temp }}&deg; Celcius</p>
-                {% endif %}
-                {% if city.summary %}
-                    <p>Summary: {{ city.summary }}</p>
-                {% else %}
-                    <p>Summary: Not available</p>
-                {% endif %}
-                {% if city.weather_main %}
-                 <p>Main weather: {{ city.weather_main }}</p>
-                {% else %}
-                    <p>Main weather: Not available</p>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No weather data available.</p>
-    {% endif %}
 </body>
 </html>
