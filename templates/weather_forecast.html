@@ -26,70 +26,65 @@
                 {% for city in all_cities %}
                 <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
                 {% endfor %}
+                <option value="All Cities" {% if city_name == "All Cities" %}selected{% endif %}>All Cities</option>
             </select>
         </form>
+        
 
         <span>{{ city_name }}</span>
-        <!-- {% if weather %}
-            <ul>
-            {% for city in weather %}
-                <li>
-                    <p>City: {{ city.name }}</p>
-                    {% if city.local_time %}
-                        <p>Local Time: {{ city.local_time }}</p>
-                    {%  endif %}
-                    {% if city.temp %}
-                    <p>Temperature: {{ city.temp }}&deg; Celcius</p>
-                    {% endif %}
-                    {% if city.summary %}
-                        <p>Summary: {{ city.summary }}</p>
-                    {% else %}
-                        <p>Summary: Not available</p>
-                    {% endif %}
-                    {% if city.weather_main %}
-                     <p>Main weather: {{ city.weather_main }}</p>
-                    {% else %}
-                        <p>Main weather: Not available</p>
-                    {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>No weather data available.</p>
-        {% endif %} -->
-
-<!-- Display daily forecast -->
-<h3>Daily Forecast for {{ city_name }}</h3>
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Min Temp</th>
-        <th>Max Temp</th>
-        <th>Weather</th>
-        <th>Wind Speed</th>
-        <th>Wind Degrees</th>
-        <th>Visibility</th>
-        <th>Sunrise</th>
-        <th>Sunset</th>
-        <th>Air Pollution Index</th>
-    </tr>
-    {% for day in weather[0].daily %}
-    <tr>
-        <td>{{ day.date }}</td>
-        <td>{{ day.temp_min }}°C</td>
-        <td>{{ day.temp_max }}°C</td>
-        <td>{{ day.weather_description }}</td>
-        <td>{{ day.rain }}</td>
-        <td> {{ day.wind_speed }}</td>
-        <td> {{ day.wind_deg }}</td>
-        <td>{{ day.sunrise }}</td>
-        <td> {{ day.sunset }} </td>
-        <td>{% if day.aqi %} {{ day.aqi }} {% else %} No AQI data {% endif %}</td>
-    {% endfor %}
-        <td rowspan="7"> {{ weather[0].visibility }}</td>
-    </tr>
-</table>
-
+        {% if weather %}
+        {% for city in weather %}
+            <h2>Weather Data for {{ city.name }}</h2>
+            <!-- City-Level Weather Data -->
+            <table>
+                <tr>
+                    <th>Local Time</th>
+                    <th>Temperature (°C)</th>
+                    <th>Summary</th>
+                </tr>
+                <tr>
+                    <td>{% if city.local_time %} {{ city.local_time }} {% else %} Not Available {% endif %}</td>
+                    <td>{% if city.temp %} {{ city.temp }}&deg; {% else %} Not Available {% endif %}</td>
+                    <td>{% if city.weather_description %} {{ city.weather_description}} {% else %} Not Available {% endif %}</td>
+                </tr>
+            </table>
+    
+            <!-- Daily Forecast for the City -->
+            <h3>Daily Forecast for {{ city.name }}</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Min Temp</th>
+                    <th>Max Temp</th>
+                    <th>Weather</th>
+                    <th>Wind Speed</th>
+                    <th>Wind Degrees</th>
+                    <th>Visibility</th>
+                    <th>Sunrise</th>
+                    <th>Sunset</th>
+                    <th>Air Pollution Index</th>
+                    <th>UV Index</th>
+                </tr>
+                {% for day in city.daily %}
+                <tr>
+                    <td>{{ day.date }}</td>
+                    <td>{{ day.temp_min }}°C</td>
+                    <td>{{ day.temp_max }}°C</td>
+                    <td>{{ day.weather_description }}</td>
+                    <td>{{ day.wind_speed }}</td>
+                    <td>{{ day.wind_deg }}</td>
+                    <td>{% if city.visibility %} {{ city.visibility }} {% else %} Not Available {% endif %}</td>
+                    <td>{{ day.sunrise }}</td>
+                    <td>{{ day.sunset }}</td>
+                    <td>{% if day.aqi %} {{ day.aqi }} {% else %} No AQI data {% endif %}</td>
+                    <td>{{ day.uvi }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>No weather data available.</p>
+    {% endif %}
     </div>
 
 </body>
