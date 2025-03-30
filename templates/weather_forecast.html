@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast</title>
+    <link rel="stylesheet" href="/static/style.css">
     <script>
         function navigateToCity() {
             const selectedCity = document.getElementById("city-select").value;
@@ -44,7 +45,6 @@
             </li>
         {% endfor %}
         </ul>
-        <p>{{weather}}</p>
     {% else %}
         <p>No weather data available.</p>
     {% endif %}
