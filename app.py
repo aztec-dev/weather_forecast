@@ -129,7 +129,7 @@ def display_weather(city_name=None):
     if city_name is None or city_name.lower() == "all cities":
         print("Displaying all cities' data")
         return render_template(
-            "weather_forecast.html",
+            "dashboard.html",
             city_name="All Cities",
             weather=weather_data,
             all_cities=[city["name"] for city in city_data]
@@ -140,7 +140,7 @@ def display_weather(city_name=None):
     if city_weather:
         print(f"Displaying data for city: {city_name}")
         return render_template(
-            "weather_forecast.html",
+            "dashboard.html",
             city_name=city_name,
             weather=city_weather,
             all_cities=[city["name"] for city in city_data]
