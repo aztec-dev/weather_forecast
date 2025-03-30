@@ -1,12 +1,5 @@
-"""
-A minimal weather forecast web application
-Date: 22/03/2025
-Author: Azariah Pundari
-"""
-
 import os
-from flask import Flask, jsonify
-from flask import render_template
+from flask import Flask, jsonify, render_template
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 import requests
@@ -17,8 +10,6 @@ api_key = os.getenv("OPEN_WEATHER_MAP_API_KEY")
 app = Flask(__name__)  # Creates an instance of flask
 
 def get_geographic_location():
-    # Testing API get
-
     cities = ["Brisbane", "Townsville", "Cairns", "Port Moresby"]
     data = []
     for city in cities:
@@ -39,7 +30,9 @@ def get_geographic_location():
 def get_weather():
     data = get_geographic_location()
     weather_data = []
+
     for city in data:
+        # Fetch weather forecast data including hourly and daily forecasts
         weather_forecast_url = f"https://api.openweathermap.org/data/3.0/onecall?lat={city['lat']}&lon={city['lon']}&units=metric&appid={api_key}"
         response = requests.get(weather_forecast_url)
         weather_forecast = response.json()
@@ -50,25 +43,32 @@ def get_weather():
             "name": city["name"],  # Include city name from geolocation data
         }
 
-        # Get humidity and temperature
+        # Get current weather
         if "current" in weather_forecast:
             required_data["temp"] = int(round(weather_forecast["current"]["temp"], 2))  # Temperature
             required_data["humidity"] = weather_forecast["current"]["humidity"]  # Humidity
 
         # Get timezone data
         if "timezone_offset" in weather_forecast:
-            timezone_offset = weather_forecast["timezone_offset"]  # Offset in seconds
-            current_utc_time = datetime.now(timezone.utc)  # Current UTC time
-            local_time = current_utc_time + timedelta(seconds=timezone_offset)  # Apply offset
-            required_data["local_time"] = local_time.strftime("%I:%M %p")  # Date time formatting
-        
-        # Get weather summary
+            timezone_offset = weather_forecast["timezone_offset"]
+            current_utc_time = datetime.now(timezone.utc)
+            local_time = current_utc_time + timedelta(seconds=timezone_offset)
+            required_data["local_time"] = local_time.strftime("%I:%M %p")
+
+        # Get daily weather forecast (daily summary)
         if "daily" in weather_forecast:
-            required_data["summary"] = weather_forecast["daily"][0].get("summary", "No summary available")
-           
-           # Get the main weather
-            if "weather" in weather_forecast["daily"][0] and len(weather_forecast["daily"][0]["weather"]) > 0:
-                required_data["weather_main"] = weather_forecast["daily"][0]["weather"][0].get("main", "No main weather available")
+            daily_forecast = []
+            for day_data in weather_forecast["daily"]:
+                day_data_processed = {
+                    "date": datetime.fromtimestamp(day_data["dt"]).strftime("%Y-%m-%d"),
+                    "temp_min": int(round(day_data["temp"]["min"], 2)),
+                    "temp_max": int(round(day_data["temp"]["max"], 2)),
+                    "weather": day_data["weather"][0]["description"],
+                    "rain": day_data.get("rain", 0),  # Rain over the day
+                }
+                daily_forecast.append(day_data_processed)
+
+            required_data["daily"] = daily_forecast
 
         weather_data.append(required_data)
         print(weather_data[-1])  # Print the last item added to weather_data for debugging
