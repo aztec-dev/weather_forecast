@@ -1,6 +1,21 @@
+@font-face {
+    font-family: 'Custom Roboto';
+    src: url('fonts/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 /* Basic css reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: var(--custom-font-family);
+}
+
+:root {
+    --custom-font-family: 'Custom Roboto';
+}
+
+.container {
+    margin: 2rem;
 }
