@@ -42,6 +42,11 @@
                 {% else %}
                     <p>Summary: Not available</p>
                 {% endif %}
+                {% if city.weather_main %}
+                 <p>Main weather: {{ city.weather_main }}</p>
+                {% else %}
+                    <p>Main weather: Not available</p>
+                {% endif %}
             </li>
         {% endfor %}
         </ul>
