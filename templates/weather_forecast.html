@@ -66,6 +66,8 @@
         <th>Min Temp</th>
         <th>Max Temp</th>
         <th>Weather</th>
+        <th>Wind Speed</th>
+        <th>Wind Degrees</th>
     </tr>
     {% for day in weather[0].daily %}
     <tr>
@@ -74,6 +76,8 @@
         <td>{{ day.temp_max }}°C</td>
         <td>{{ day.weather }}</td>
         <td>{{ day.rain }}</td>
+        <td> {{ day.wind_speed }}</td>
+        <td> {{ day.wind_deg }}</td>
     </tr>
     {% endfor %}
 </table>

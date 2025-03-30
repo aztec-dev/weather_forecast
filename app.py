@@ -63,7 +63,9 @@ def get_weather():
                     "date": datetime.fromtimestamp(day_data["dt"]).strftime("%Y-%m-%d"),
                     "temp_min": int(round(day_data["temp"]["min"], 2)),
                     "temp_max": int(round(day_data["temp"]["max"], 2)),
-                    "weather": day_data["weather"][0]["description"],
+                    "wind_speed": int(round(day_data["wind_speed"], 2)),
+                    "wind_deg": int(round(day_data["wind_deg"], 2)),
+                    "weather_description": day_data["weather"][0]["description"],
                     "rain": day_data.get("rain", 0),  # Rain over the day
                 }
                 daily_forecast.append(day_data_processed)
