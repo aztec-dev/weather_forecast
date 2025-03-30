@@ -8,6 +8,7 @@ import os
 from flask import Flask, jsonify
 from flask import render_template
 from dotenv import load_dotenv
+from datetime import datetime, timedelta, timezone
 import requests
 
 # Load environment variables
@@ -49,13 +50,23 @@ def get_weather():
             "name": city["name"],  # Include city name from geolocation data
         }
 
+        # Get humidity and temperature
         if "current" in weather_forecast:
             required_data["temp"] = int(round(weather_forecast["current"]["temp"], 2))  # Temperature
             required_data["humidity"] = weather_forecast["current"]["humidity"]  # Humidity
 
+        # Get timezone data
+        if "timezone_offset" in weather_forecast:
+            timezone_offset = weather_forecast["timezone_offset"]  # Offset in seconds
+            current_utc_time = datetime.now(timezone.utc)  # Current UTC time
+            local_time = current_utc_time + timedelta(seconds=timezone_offset)  # Apply offset
+            required_data["local_time"] = local_time.strftime("%I:%M %p")  # Date time formatting
+        
+        # Get weather summary
         if "daily" in weather_forecast:
             required_data["summary"] = weather_forecast["daily"][0].get("summary", "No summary available")
            
+           # Get the main weather
             if "weather" in weather_forecast["daily"][0] and len(weather_forecast["daily"][0]["weather"]) > 0:
                 required_data["weather_main"] = weather_forecast["daily"][0]["weather"][0].get("main", "No main weather available")
 
