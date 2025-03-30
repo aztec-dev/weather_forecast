@@ -69,6 +69,8 @@
         <th>Wind Speed</th>
         <th>Wind Degrees</th>
         <th>Visibility</th>
+        <th>Sunrise</th>
+        <th>Sunset</th>
     </tr>
     {% for day in weather[0].daily %}
     <tr>
@@ -79,7 +81,8 @@
         <td>{{ day.rain }}</td>
         <td> {{ day.wind_speed }}</td>
         <td> {{ day.wind_deg }}</td>
-        
+        <td>{{ day.sunrise }}</td>
+        <td> {{ day.sunset }} </td>
     {% endfor %}
         <td rowspan="7"> {{ weather[0].visibility }}</td>
     </tr>
