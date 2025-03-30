@@ -32,7 +32,7 @@ def get_geographic_location():
                 "lat": city_data['lat']
             }
             data.append(required_data)
-            
+
     return data
 
 def get_weather():
@@ -50,11 +50,14 @@ def get_weather():
         }
 
         if "current" in weather_forecast:
-            required_data["temp"] = weather_forecast["current"]["temp"]  # Temperature
+            required_data["temp"] = int(round(weather_forecast["current"]["temp"], 2))  # Temperature
             required_data["humidity"] = weather_forecast["current"]["humidity"]  # Humidity
 
         if "daily" in weather_forecast:
             required_data["summary"] = weather_forecast["daily"][0].get("summary", "No summary available")
+           
+            if "weather" in weather_forecast["daily"][0] and len(weather_forecast["daily"][0]["weather"]) > 0:
+                required_data["weather_main"] = weather_forecast["daily"][0]["weather"][0].get("main", "No main weather available")
 
         weather_data.append(required_data)
         print(weather_data[-1])  # Print the last item added to weather_data for debugging
