@@ -24,6 +24,7 @@ def get_geographic_location():
         geocoding_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={api_key}"
         response = requests.get(geocoding_url)
         geo_location = response.json()
+
         for city_data in geo_location:
             required_data = {
                 "name": city_data['name'],
@@ -31,6 +32,7 @@ def get_geographic_location():
                 "lat": city_data['lat']
             }
             data.append(required_data)
+            
     return data
 
 def get_weather():
@@ -47,16 +49,13 @@ def get_weather():
             "name": city["name"],  # Include city name from geolocation data
         }
 
-        # Add current weather data if available
         if "current" in weather_forecast:
             required_data["temp"] = weather_forecast["current"]["temp"]  # Temperature
             required_data["humidity"] = weather_forecast["current"]["humidity"]  # Humidity
 
-        # Add daily summary data if available
         if "daily" in weather_forecast:
             required_data["summary"] = weather_forecast["daily"][0].get("summary", "No summary available")
 
-        # Append the combined data for the city
         weather_data.append(required_data)
         print(weather_data[-1])  # Print the last item added to weather_data for debugging
 
