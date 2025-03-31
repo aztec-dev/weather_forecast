@@ -18,7 +18,7 @@ async def fetch_data(session, url):
 
 # Get geographic location of cities
 async def get_geographic_location():
-    cities = ["Brisbane", "Townsville", "Cairns", "Port Moresby"]
+    cities = ["Brisbane", "Townsville", "Cairns", "Port Moresby", "Paris"]
     data = []
 
     async with aiohttp.ClientSession() as session:
@@ -100,6 +100,7 @@ async def get_weather():
                 current_utc_time = datetime.now(timezone.utc)
                 local_time = current_utc_time + timedelta(seconds=timezone_offset)
                 required_data["local_time"] = local_time.strftime("%I:%M %p")
+                required_data["day_of_week"] = local_time.strftime("%A")
 
             # Daily weather forecast
             if "daily" in weather_forecast:
@@ -154,4 +155,3 @@ def display_weather(city_name=None):
     city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
     if city_weather:
         return render_template("dashboard.html", city_name=city_name, weather=city_weather, all_cities=[city["name"] for city in city_data])
-
