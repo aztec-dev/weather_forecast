@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function navigateToCity() {
             const selectedCity = document.getElementById("city-select").value;
@@ -15,76 +16,33 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <span class="title"><h1 class="">Weather Forecast</h1></span>
+    <main class="container temp-border">
+        <div class="">
+            <span class="title"><h1 class="">Weather Forecast</h1></span>
 
-        <!-- Dropdown to select city -->
-        <form>
-            <label for="city-select">Choose a city:</label>
-            <select id="city-select" onchange="navigateToCity()">
-                <option value="">--Select a City--</option>
-                {% for city in all_cities %}
-                <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
+            <!-- Dropdown to select city -->
+            <form id="city-select-form">
+                <label for="city-select">Choose a city:</label>
+                <select id="city-select" onchange="navigateToCity()">
+                    <option value="All cities" {% if city_name == "All Cities" %}selected{% endif %}>All Cities</option>
+                    {% for city in all_cities %}
+                    <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            
+            <div class="weather-card temp-border">
+                <div class="img-container">
+                    <img src="{{ url_for('static', filename='assets/' + city_name + '.jpg') }}" alt="{{ city_name }}">
+                    <span class="city-name">{{ city_name }}</span>
+                </div>
+                {% if weather %}
+                {% for city in weather %}
+                    {% if city.temp %}{{city.temp}}&deg; C {% else %} No temperature available. {% endif %}
                 {% endfor %}
-                <option value="All Cities" {% if city_name == "All Cities" %}selected{% endif %}>All Cities</option>
-            </select>
-        </form>
-        
-
-        <span>{{ city_name }}</span>
-        {% if weather %}
-        {% for city in weather %}
-            <h2>Weather Data for {{ city.name }}</h2>
-            <!-- City-Level Weather Data -->
-            <table>
-                <tr>
-                    <th>Local Time</th>
-                    <th>Temperature (°C)</th>
-                    <th>Summary</th>
-                </tr>
-                <tr>
-                    <td>{% if city.local_time %} {{ city.local_time }} {% else %} Not Available {% endif %}</td>
-                    <td>{% if city.temp %} {{ city.temp }}&deg; {% else %} Not Available {% endif %}</td>
-                    <td>{% if city.weather_description %} {{ city.weather_description}} {% else %} Not Available {% endif %}</td>
-                </tr>
-            </table>
-    
-            <!-- Daily Forecast for the City -->
-            <h3>Daily Forecast for {{ city.name }}</h3>
-            <table>
-                <tr>
-                    <th>Date</th>
-                    <th>Min Temp</th>
-                    <th>Max Temp</th>
-                    <th>Weather</th>
-                    <th>Wind Speed</th>
-                    <th>Wind Degrees</th>
-                    <th>Visibility</th>
-                    <th>Sunrise</th>
-                    <th>Sunset</th>
-                    <th>Air Pollution Index</th>
-                    <th>UV Index</th>
-                </tr>
-                {% for day in city.daily %}
-                <tr>
-                    <td>{{ day.date }}</td>
-                    <td>{{ day.temp_min }}°C</td>
-                    <td>{{ day.temp_max }}°C</td>
-                    <td>{{ day.weather_description }}</td>
-                    <td>{{ day.wind_speed }}</td>
-                    <td>{{ day.wind_deg }}</td>
-                    <td>{% if city.visibility %} {{ city.visibility }} {% else %} Not Available {% endif %}</td>
-                    <td>{{ day.sunrise }}</td>
-                    <td>{{ day.sunset }}</td>
-                    <td>{% if day.aqi %} {{ day.aqi }} {% else %} No AQI data {% endif %}</td>
-                    <td>{{ day.uvi }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% endfor %}
-    {% else %}
-        <p>No weather data available.</p>
-    {% endif %}
+                {% endif %}
+            </div>
+        </main>
     </div>
 
 </body>
