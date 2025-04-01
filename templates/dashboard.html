@@ -45,8 +45,10 @@
                             <img src="https://openweathermap.org/img/wn/{{city.icon}}@4x.png" alt="weather icon">
                         {% endif %}
                         <span class="text-xl">{% if city.temp %}{{city.temp}}&deg;<span class="superscript">C</span> {% else %} No data available. {% endif %}</span>
-                        <span>{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>
-                        <span>{% if city.local_time %}{{city.local_time}}{% else %} No data available. {% endif %}</span>
+                        <div class="inline-container">
+                            <span class="inline">{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>
+                            <span class="inline">{% if city.local_time %}{{city.local_time}}{% else %} No data available. {% endif %}</span>
+                        </div>                        
                         {% if city.weather_description %}{{ city.weather_description.title() }}{% else %} No temperature available. {% endif %}
                     {% endfor %}
                     {% endif %}
