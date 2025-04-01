@@ -102,7 +102,7 @@ async def get_weather():
                 timezone_offset = weather_forecast["timezone_offset"]
                 current_utc_time = datetime.now(timezone.utc)
                 local_time = current_utc_time + timedelta(seconds=timezone_offset)
-                required_data["local_time"] = local_time.strftime("%I:%M %p")
+                required_data["local_time"] = local_time.strftime("%H:%M")
                 required_data["day_of_week"] = local_time.strftime("%A")
 
             # Daily weather forecast
