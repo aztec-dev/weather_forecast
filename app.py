@@ -129,7 +129,7 @@ async def get_weather():
                 required_data["daily"] = daily_forecast
 
             weather_data.append(required_data)
-
+    # print(weather_data)
     return weather_data
 
 @app.route("/weather_forecast")
@@ -158,3 +158,6 @@ def display_weather(city_name=None):
     city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
     if city_weather:
         return render_template("dashboard.html", city_name=city_name, weather=city_weather, all_cities=[city["name"] for city in city_data])
+    
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
