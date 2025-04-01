@@ -44,6 +44,47 @@ html {
     text-align: center;
 }
 
+.title {
+    display: none;
+} 
+#city-select-form {
+    display: none;
+} 
+.superscript {
+    font-size: calc(2.5rem / 2);
+    position: relative;
+    top: -1rem
+}
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    /* padding: 0rem 0rem 3rem 0rem; */
+    padding-bottom: 2rem;
+    align-items: center;
+    background: snow;
+    border-radius: 1.5rem;
+    box-shadow: 10px 5px 5px black;
+}
+
+.icon-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0 1.5rem 0;
+}
+
+.content {
+    position: relative;
+    right: 3rem;
+}
+
+.mini-weather-info {
+    margin-top: 1rem;
+}
 /* Text sizes */
 .text-xs {
     font-size: x-small;
@@ -65,9 +106,32 @@ html {
     font-size: 2.5rem;
 }
 
+/* Margin sizes */
+.sm-mt {
+    margin-top: 1.2rem;
+}
+
+.md-mt {
+    margin-top: 1.4rem;
+}
+
+.lg-mt {
+    margin-top: 1.6rem;
+}
+
 .inline {
     display: inline-block;
 }
+
+.block {
+    display: block;
+}
+
+.block img  {
+    position: relative;
+    top: 4px;
+}
+
 /*  Media queries */
 @media  screen and (max-width: 375px) {
     .title {
@@ -83,7 +147,7 @@ html {
     }
     .weather-info {
         display: flex;
-        flex-direction: column;
+        flex-direction: block;
         padding: 1rem;
         align-items: center;
         background: snow;

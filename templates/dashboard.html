@@ -40,19 +40,26 @@
                     {% if weather %}
 
                     {% for city in weather %}
-                        <!-- <span>{% if city.name %}{{city.name}}{% else %} No data available. {% endif %}</span> -->
+                    <div class="icon-container">
                         {% if city.icon %}
-                            <img src="https://openweathermap.org/img/wn/{{city.icon}}@4x.png" alt="weather icon">
+                            <img id="weather-icon" class="glow" src="https://openweathermap.org/img/wn/{{city.icon}}@4x.png" width="128px" height="128px" alt="weather icon">
                         {% endif %}
+                    </div>
+                    <div class="content">
                         <span class="text-xl">{% if city.temp %}{{city.temp}}&deg;<span class="superscript">C</span> {% else %} No data available. {% endif %}</span>
-                        <div class="inline-container">
+                        <div class="mini-weather-info">
                             <span class="inline">{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>
                             <span class="inline">{% if city.local_time %}{{city.local_time}}{% else %} No data available. {% endif %}</span>
-                        </div>                        
-                        {% if city.weather_description %}{{ city.weather_description.title() }}{% else %} No temperature available. {% endif %}
+                        </div>
+                        <div class="mini-weather-info">                        
+                            <span class="block">{% if city.weather_description %}{{ city.weather_description.title() }}{% else %} No data available. {% endif %}</span>
+                            <span class="block">{% if city.daily and city.daily[0] %}<img src="/static/assets/rain-fall.png" width="20px" height="20px" /> {{ city.daily[0].rain }} mm{% else %}No data available.{% endif %}</span>
+                        </div>
+                    </div>
                     {% endfor %}
                     {% endif %}
                 </div>
+                <div class="image-container"></div>
             </div>
         </main>
     </div>
