@@ -16,7 +16,7 @@
     </script>
 </head>
 <body>
-    <main class="container temp-border">
+    <main class="container">
         <div class="">
             <span class="title"><h1 class="">Weather Forecast</h1></span>
 
@@ -38,11 +38,11 @@
                 <!-- </div> -->
                 <div class="weather-info">
                     {% if weather %}
-                    <img src="/static/assets/icons/512/cloudy.png" width="100px" height="100px" alt="weather logo">
+
                     {% for city in weather %}
-                        
-                        <span>{% if city.name %}{{city.name}}{% else %} No data available. {% endif %}</span>
-                        <span>{% if city.temp %}{{city.temp}}&deg; C {% else %} No data available. {% endif %}</span>
+                        <!-- <span>{% if city.name %}{{city.name}}{% else %} No data available. {% endif %}</span> -->
+                        <img src="/static/assets/icons/512/cloudy.png" width="100px" height="100px" alt="weather logo">
+                        <span class="text-xl">{% if city.temp %}{{city.temp}}&deg;<span class="superscript">C</span> {% else %} No data available. {% endif %}</span>
                         <span>{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>
                         <span>{% if city.local_time %}{{city.local_time}}{% else %} No data available. {% endif %}</span>
                         {% if city.weather_description %}{{ city.weather_description.title() }}{% else %} No temperature available. {% endif %}

@@ -4,6 +4,10 @@
     font-weight: normal;
     font-style: normal;
 }
+:root {
+    --custom-font-family: 'Custom Roboto';
+    --charcoal: #36454F;
+}
 /* Basic css reset */
 * {
     margin: 0;
@@ -12,10 +16,11 @@
     font-family: var(--custom-font-family);
 }
 
-/* Global styles */
-:root {
-    --custom-font-family: 'Custom Roboto';
+html {
+    background-color: var(--charcoal);
 }
+
+/* Global styles */
 
 .temp-border {
     border: 0.5px solid red;
@@ -28,7 +33,6 @@
 
 /* Component specific styles */
 
-
 #city-select {
     width: 200px;
     height: 100px;
@@ -40,6 +44,25 @@
     text-align: center;
 }
 
+.text-xs {
+    font-size: x-small;
+}
+.text-sm {
+    font-size: small;
+}
+
+.text-md {
+    font-size: medium;
+}
+
+.text-lg {
+    font-size: large;
+}
+
+.text-xl {
+    font-size: 2.5rem;
+}
+
 /*  Media queries */
 @media  screen and (max-width: 375px) {
     .title {
@@ -48,6 +71,11 @@
     #city-select-form {
         display: none;
     } 
+    .superscript {
+        font-size: calc(2.5rem / 2);
+        position: relative;
+        top: -1rem
+    }
     .img-container {
         display: block;
         width: 100%;
@@ -64,7 +92,14 @@
     .weather-info {
         display: flex;
         flex-direction: column;
+        padding: 1.2rem;
         align-items: center;
-        text-align: left;
+        background: snow;
+        border-radius: 1.5rem;
+        box-shadow: 10px 5px 5px black;
+    }
+    .weather-info img {
+        position: relative;
+        left: -3px;
     }
 }
