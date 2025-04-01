@@ -92,7 +92,10 @@ async def get_weather():
                 required_data["temp"] = int(round(weather_forecast["current"]["temp"], 2))
                 required_data["humidity"] = weather_forecast["current"]["humidity"]
                 required_data["visibility"] = weather_forecast["current"]["visibility"]
+                required_data["weather_id"] = weather_forecast["current"]["weather"][0]["id"]
+                required_data["weather_main"] = weather_forecast["current"]["weather"][0]["main"]
                 required_data["weather_description"] = weather_forecast["current"]["weather"][0]["description"]
+                required_data["icon"] = weather_forecast["current"]["weather"][0]["icon"]
 
             # Timezone data
             if "timezone_offset" in weather_forecast:

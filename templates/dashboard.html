@@ -41,7 +41,9 @@
 
                     {% for city in weather %}
                         <!-- <span>{% if city.name %}{{city.name}}{% else %} No data available. {% endif %}</span> -->
-                        <img src="/static/assets/icons/512/cloudy.png" width="100px" height="100px" alt="weather logo">
+                        {% if city.icon %}
+                            <img src="https://openweathermap.org/img/wn/{{city.icon}}@4x.png" alt="weather icon">
+                        {% endif %}
                         <span class="text-xl">{% if city.temp %}{{city.temp}}&deg;<span class="superscript">C</span> {% else %} No data available. {% endif %}</span>
                         <span>{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>
                         <span>{% if city.local_time %}{{city.local_time}}{% else %} No data available. {% endif %}</span>
