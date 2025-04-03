@@ -1,7 +1,7 @@
 # The blueprint containing website routes for weather forecast.
 import asyncio
 from flask import (
-    Blueprint, g, redirect, render_template, request, session, url_for
+    Blueprint, render_template
 )
 
 from weather_forecast.db import get_weather_forecast, get_air_pollution_index, get_geographic_location
