@@ -1,14 +1,13 @@
+# Acts as a database. Gets data from Open Weather Map using their API and stores locally.
 import os
 import aiohttp
 import asyncio
-from flask import Flask, render_template
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 
 # Load environment variables
 load_dotenv()
 api_key = os.getenv("OPEN_WEATHER_MAP_API_KEY")
-app = Flask(__name__)  # Creates an instance of flask
 
 # Asynchronous helper function
 async def fetch_data(session, url):
@@ -65,7 +64,7 @@ async def get_air_pollution_index():
     return required_data
 
 # Get weather data
-async def get_weather():
+async def get_weather_forecast():
     data = await get_geographic_location()
     air_pollution_index = await get_air_pollution_index()
     weather_data = []
@@ -131,33 +130,3 @@ async def get_weather():
             weather_data.append(required_data)
     # print(weather_data)
     return weather_data
-
-@app.route("/weather_forecast")
-@app.route("/weather_forecast/<city_name>")
-def display_weather(city_name=None):
-    city_data = asyncio.run(get_geographic_location())
-    weather_data = asyncio.run(get_weather())
-    air_pollution_index = asyncio.run(get_air_pollution_index())
-
-    # Map city data with air pollution index
-    for city in city_data:
-        for pollution in air_pollution_index:
-            if city['lat'] == pollution['lat'] and city['lon'] == pollution['lon']:
-                city['aqi'] = pollution['aqi']
-
-    # Link city names and AQI to weather data
-    for weather in weather_data:
-        for city in city_data:
-            if weather['lat'] == city['lat'] and weather['lon'] == city['lon']:
-                weather['name'] = city['name']
-                weather['aqi'] = city.get('aqi', "No AQI data")
-
-    if city_name is None or city_name.lower() == "all cities":
-        return render_template("dashboard.html", city_name="All Cities", weather=weather_data, all_cities=[city["name"] for city in city_data])
-
-    city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
-    if city_weather:
-        return render_template("dashboard.html", city_name=city_name, weather=city_weather, all_cities=[city["name"] for city in city_data])
-    
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
