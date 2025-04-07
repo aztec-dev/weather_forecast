@@ -46,6 +46,7 @@
                         {% endif %}
                     </div>
                     <div class="content">
+                        <span class="text-xl">{% if city.name %}{{city.name}}&deg;<span class="superscript"></span> {% else %} No data available. {% endif %}</span>
                         <span class="text-xl">{% if city.temp %}{{city.temp}}&deg;<span class="superscript">C</span> {% else %} No data available. {% endif %}</span>
                         <div class="mini-weather-info">
                             <span class="inline">{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>

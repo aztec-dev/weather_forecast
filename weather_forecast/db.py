@@ -16,15 +16,14 @@ async def fetch_data(session, url):
 
 
 # Get geographic location of cities
-async def get_geographic_location():
+async def get_geographic_location(city_name):
     cities = ["Brisbane", "Townsville", "Cairns", "Port Moresby", "Paris"]
     data = []
 
     async with aiohttp.ClientSession() as session:
         tasks = []
-        for city in cities:
-            geocoding_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={api_key}"
-            tasks.append(fetch_data(session, geocoding_url))  # Create tasks for each city
+        geocoding_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit=1&appid={api_key}"
+        tasks.append(fetch_data(session, geocoding_url))  # Create tasks for each city
 
         responses = await asyncio.gather(*tasks)
 
@@ -41,8 +40,8 @@ async def get_geographic_location():
 
 
 # Get air pollution index
-async def get_air_pollution_index():
-    data = await get_geographic_location()
+async def get_air_pollution_index(city_name):
+    data = await get_geographic_location(city_name)
     required_data = []
 
     async with aiohttp.ClientSession() as session:
@@ -64,9 +63,9 @@ async def get_air_pollution_index():
     return required_data
 
 # Get weather data
-async def get_weather_forecast():
-    data = await get_geographic_location()
-    air_pollution_index = await get_air_pollution_index()
+async def get_weather_forecast(city_name):
+    data = await get_geographic_location(city_name)
+    air_pollution_index = await get_air_pollution_index(city_name)
     weather_data = []
 
     async with aiohttp.ClientSession() as session:

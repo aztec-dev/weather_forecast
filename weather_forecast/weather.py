@@ -11,9 +11,9 @@ bp = Blueprint('weather_forecast', __name__, url_prefix='/weather_forecast')
 @bp.route("/forecast")
 @bp.route("/forecast/<city_name>")
 def display_weather(city_name=None):
-    city_data = asyncio.run(get_geographic_location())
-    weather_data = asyncio.run(get_weather_forecast())
-    air_pollution_index = asyncio.run(get_air_pollution_index())
+    city_data = asyncio.run(get_geographic_location(city_name))
+    weather_data = asyncio.run(get_weather_forecast(city_name))
+    air_pollution_index = asyncio.run(get_air_pollution_index(city_name))
 
     # Map city data with air pollution index
     for city in city_data:
