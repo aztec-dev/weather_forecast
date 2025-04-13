@@ -7,6 +7,7 @@ from flask import (
 from weather_forecast.db import get_weather_forecast, get_air_pollution_index, get_geographic_location
 from . import city_names
 bp = Blueprint('weather_forecast', __name__, url_prefix='/weather_forecast')
+status_code = 0
 
 @bp.route("/<city_name>")
 def display_weather(city_name=None):
@@ -28,13 +29,13 @@ def display_weather(city_name=None):
 
     # TODO: Handle no city data available
 
-    if city_name is None or city_name.lower() == "all cities":
-        return render_template("dashboard.html", city_name="All Cities", weather=weather_data)
 
     city_weather = [weather for weather in weather_data if weather.get("name") == city_name]
     if city_weather:
         return render_template("dashboard.html", city_name=city_name, weather=city_weather, city_names=city_names.get_city_name())
+    else:
+        return render_template("404.html", message=f"City '{city_name}' not found."), 404
     
 @bp.route("/")
-def hello():
-    return render_template("dashboard.html", city_names=city_names.get_city_name())
+def index():
+    return render_template("dashboard.html")
