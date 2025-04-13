@@ -4,38 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
     <script>
-        function navigateToCity() {
-            const selectedCity = document.getElementById("city-select").value;
-            if (selectedCity) {
-                window.location.href = `/weather_forecast/${selectedCity}`;
-            }
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var input = document.getElementById('myInput');
+          
+            input.addEventListener('input', function() {
+              var filter = input.value.trim();
+          
+              // If the input is empty, do nothing
+              if (filter.length === 0) return;
+            });
+          
+            input.addEventListener('keypress', function(event) {
+              if (event.key === "Enter") {
+                event.preventDefault(); // Prevent accidental form submission
+          
+                // Convert input to Title Case
+                var searchQuery = input.value.toLowerCase().split(" ").map(word => 
+                  word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(" ");
+          
+                input.value = searchQuery; // Update input field with Title Case text
+          
+                // Redirect or submit search query
+                window.location.href = `http://127.0.0.1:5000/weather_forecast/${searchQuery}`;
+              }
+            });
+          });
     </script>
 </head>
 <body>
     <main class="container">
-        <div class="">
-            <span class="title"><h1 class="">Weather Forecast</h1></span>
-
-            <!-- Dropdown to select city -->
-            <form id="city-select-form">
-                <label for="city-select">Choose a city:</label>
-                <select id="city-select" onchange="navigateToCity()">
-                    <option value="All cities" {% if city_name == "All Cities" %}selected{% endif %}>All Cities</option>
-                    {% for city in all_cities %}
-                    <option value="{{ city }}" {% if city == city_name %}selected{% endif %}>{{ city }}</option>
+        <div role="search-bar">
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for City">
+            <!-- <ul id="search-ul">
+                {% if city_names %}
+                    {% for name in city_names %}
+                        <li><a href="http://127.0.0.1:5000/weather_forecast/{{name}}">{{name}}</a></li>
                     {% endfor %}
-                </select>
-            </form>
-            
-            <!-- <div class="weather-card temp-border">
-                <div class="img-container">
-                    <img src="{{ url_for('static', filename='assets/' + city_name + '.jpg') }}" alt="{{ city_name }}"> -->
-                    <!-- <span class="city-name">{{ city_name }}</span> -->
-                <!-- </div> -->
+                {% else %}
+                    <p>No cities available</p>
+                {% endif %} -->
+            </ul>
+        </div>
+        <div class="temp-border">
+            <span class="title"><h1>Weather Forecast</h1></span>
                 <div class="weather-info">
                     {% if weather %}
 
@@ -46,7 +60,6 @@
                         {% endif %}
                     </div>
                     <div class="content">
-                        <span class="text-xl">{% if city.name %}{{city.name}}&deg;<span class="superscript"></span> {% else %} No data available. {% endif %}</span>
                         <span class="text-xl">{% if city.temp %}{{city.temp}}&deg;<span class="superscript">C</span> {% else %} No data available. {% endif %}</span>
                         <div class="mini-weather-info">
                             <span class="inline">{% if city.day_of_week %}{{city.day_of_week}}{% else %} No data available. {% endif %}</span>
@@ -54,16 +67,17 @@
                         </div>
                         <div class="mini-weather-info">                        
                             <span class="block">{% if city.weather_description %}{{ city.weather_description.title() }}{% else %} No data available. {% endif %}</span>
-                            <span class="block">{% if city.daily and city.daily[0] %}<img src="/static/assets/rain-fall.png" width="20px" height="20px" /> {{ city.daily[0].rain }} mm{% else %}No data available.{% endif %}</span>
+                            <span class="block">{% if city.daily and city.daily[0] %}<img src="../static/assets/rain-fall.png" width="20px" height="20px" /> {{ city.daily[0].rain }} mm{% else %}No data available.{% endif %}</span>
                         </div>
                     </div>
                     {% endfor %}
                     {% endif %}
                 </div>
                 <div class="image-container"></div>
+                {% if all_cities %}
+                    <p>{{all_cities}}</p>
+                {% endif %}
             </div>
-        </main>
-    </div>
-
+    </main>
 </body>
 </html>

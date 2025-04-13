@@ -17,9 +17,7 @@ async def fetch_data(session, url):
 
 # Get geographic location of cities
 async def get_geographic_location(city_name):
-    cities = ["Brisbane", "Townsville", "Cairns", "Port Moresby", "Paris"]
     data = []
-
     async with aiohttp.ClientSession() as session:
         tasks = []
         geocoding_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit=1&appid={api_key}"
